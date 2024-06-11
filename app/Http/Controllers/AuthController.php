@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -45,5 +46,32 @@ class AuthController extends Controller
             'message' => 'User created successfully',
             'user' => $user
         ]);
+    }
+    public function login(Request $request){
+        $request->validate([
+            'email'=>'required',
+            'password'=>'required',
+        ]);
+        $user=User::where('email',$request->email)->first();
+        if(!$user){
+            return response()->json([
+               'message' => 'User not found','status' => false,
+            ]);
+        }
+        if(Hash::check($request->password,$user->password)){
+            $access_token=$user->createToken('authToken')->plainTextToken;
+            return response([
+                'message'=>'login successful',
+                'success'=>true,
+                'user'=>$user,
+                'access_token'=>$access_token,
+            ]);
+        }
+        return response([
+            'message'=>'login failed',
+           'success'=>false,
+
+        ]);
+
     }
 }
