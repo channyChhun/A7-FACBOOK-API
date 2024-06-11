@@ -31,10 +31,15 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Posts $posts)
+    public function show($id)
     {
-        //
-    }
+        $posts = Post::find($id);
+        return response()->json([
+            'success' => true,
+            'message' => 'Resource was successfully retrieved with the id: '.$id,
+            'data' => $posts
+    ], 200);
+}
 
     /**
      * Update the specified resource in storage.
