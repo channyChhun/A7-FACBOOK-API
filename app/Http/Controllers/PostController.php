@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Post;
 use Illuminate\Http\Request;
+
 
 class PostController extends Controller
 {
@@ -25,30 +25,45 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $posts = Post::create($request->all());
+        return response()->json([
+           'success' => true,
+           'message' => 'Post created successfully',
+            'data' => $posts,
+        ], 201);
+    
+        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Posts $posts)
+    public function show(Post $posts)
     {
-        //
+
+        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Posts $posts)
+    public function update(Request $request, Post $posts)
     {
-        //
+        $posts->update($request->all());
+    
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Posts $posts)
+    public function destroy(Post $posts)
     {
-        //
+        $posts->delete();
+        return response()->json([
+           'success' => true,
+           'message' => 'Post deleted successfully',
+            'data' => $posts,
+        ], 200);
+    
     }
 }
