@@ -25,30 +25,70 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'title' =>'required',
+            'content' =>'required',
+        ]);
+        $post = Post::create([
+            'title'=>$request->title,
+            'content'=>$request->content,
+            'user_id'=>$request->user_id,
 
+
+        ]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Post created successfully',
+            'data' => $post,
+        ], 201);
+
+
+
+        
+    }
     /**
      * Display the specified resource.
      */
-    public function show(Posts $posts)
+    public function show($id)
     {
-        //
+        $posts = Post::find($id);
+        return response()->json([
+            'success' => true,
+            'message' => 'Resource was successfully retrieved with the id: '.$id,
+            'data' => $posts
+    ], 200);
+        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Posts $posts)
+    public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            'title' => 'sometimes|required',
+            'content' => 'sometimes|required',
+        ]);
+
+        $post->update($request->only(['title', 'content']));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Post updated successfully',
+            'data' => $post,
+        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Posts $posts)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Post deleted successfully',
+        ], 200);
     }
 }
