@@ -22,5 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);
-Route::resource('/post',PostController::class);
+
+Route::middleware('auth:sanctum')->group(function(){
+    Route::resource('/post',PostController::class);
+
+});
 Route::post('/logout',[AuthController::class, 'logout']);
