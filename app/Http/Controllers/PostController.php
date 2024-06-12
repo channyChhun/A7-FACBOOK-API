@@ -23,39 +23,19 @@ class PostController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show($id)
     {
         $posts = Post::find($id);
-        return response()->json([
+        return $posts ? response()->json([
             'success' => true,
             'message' => 'Resource was successfully retrieved with the id: '.$id,
             'data' => $posts
-    ], 200);
-}
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Posts $posts)
-    {
-        //
+        ], 200): response()->json([
+            'success' => false,
+            'message' => 'Resource was not found with the id: '.$id,
+        ], 404);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Posts $posts)
-    {
-        //
-    }
+   
 }

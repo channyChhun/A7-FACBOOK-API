@@ -19,7 +19,8 @@ use App\Http\Controllers\PostController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+Route::middleware('auth:sanctum')->group(function(){
+    Route::resource('/post',PostController::class);
+});
 Route::post('/register', [AuthController::class, 'register']);
-Route::resource('/post',PostController::class);
 Route::post('/login',[AuthController::class, 'login']);
