@@ -21,19 +21,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// =========register login logout user========
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);
-
-Route::middleware('auth:sanctum')->group(function(){
-    Route::resource('/post',PostController::class);
-
-});
 Route::post('/logout',[AuthController::class, 'logout']);
+// =========profile user========
 Route::get('user',[ProfileController::class,'index']);
 Route::get('user/show/{id}', [ProfileController::class, 'show']);
 Route::get('user/edit/{id}', [ProfileController::class, 'update']);
-// Route::middleware('auth:sanctum')->group(function(){
-  
+// ============="""=======
+Route::middleware('auth:sanctum')->group(function(){
+  Route::post('/profileupload',[ProfileController::class,'store']);
+  Route::resource('/post',PostController::class);
 
-// });
+});
 
