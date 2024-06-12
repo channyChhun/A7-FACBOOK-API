@@ -25,14 +25,9 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PostRequest $request)
+    public function store(Request $request)
     {
-        $posts = Post::storeOrUpate($request);
-        return response()->json([
-            'success' => true,
-            'message' => 'You successfully created a new post',
-            'data' => new PostResource($posts),
-        ], 200);
+        
     }
 
     /**
