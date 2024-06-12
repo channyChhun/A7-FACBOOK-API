@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Resources\Postsource;
+use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
@@ -12,7 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts= Post::all();
         return response()->json([
             'success' => true,
             'message' => 'Here are all of your posts',
@@ -23,9 +25,14 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        //
+        $posts = Post::storeOrUpate($request);
+        return response()->json([
+            'success' => true,
+            'message' => 'You successfully created a new post',
+            'data' => new PostResource($posts),
+        ], 200);
     }
 
     /**
