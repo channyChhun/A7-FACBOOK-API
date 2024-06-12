@@ -32,8 +32,11 @@ class PostController extends Controller
             'success' => true,
             'message' => 'Resource was successfully retrieved with the id: '.$id,
             'data' => $posts
-    ], 200);
-}
+        ], 200): response()->json([
+            'success' => false,
+            'message' => 'Resource was not found with the id: '.$id,
+        ], 404);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -48,11 +51,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
-        ], 200): response()->json([
-            'success' => false,
-            'message' => 'Resource was not found with the id: '.$id,
-        ], 404);
+       
     }
    
 }
