@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Resources\Postsource;
+use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
@@ -12,7 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts= Post::all();
         return response()->json([
             'success' => true,
             'message' => 'Here are all of your posts',
@@ -25,21 +27,26 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Posts $posts)
+    public function show($id)
     {
-        //
-    }
+        $posts = Post::find($id);
+        return response()->json([
+            'success' => true,
+            'message' => 'Resource was successfully retrieved with the id: '.$id,
+            'data' => $posts
+    ], 200);
+}
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Posts $posts)
+    public function update(Request $request, Post $post)
     {
         //
     }
@@ -47,7 +54,7 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Posts $posts)
+    public function destroy(Post $post)
     {
         //
     }
