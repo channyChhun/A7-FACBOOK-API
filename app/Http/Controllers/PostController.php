@@ -29,7 +29,7 @@ class PostController extends Controller
             'title' =>'required',
             'content' =>'required',
         ]);
-        $post = Post::create([
+        $posts = Post::create([
             'title'=>$request->title,
             'content'=>$request->content,
             'user_id'=>$request->user_id,
@@ -39,7 +39,7 @@ class PostController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Post created successfully',
-            'data' => $post,
+            'data' => $posts,
         ], 201);
 
 
@@ -63,28 +63,28 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Post $posts)
     {
         $request->validate([
             'title' => 'sometimes|required',
             'content' => 'sometimes|required',
         ]);
 
-        $post->update($request->only(['title', 'content']));
+        $posts->update($request->only(['title', 'content']));
 
         return response()->json([
             'success' => true,
             'message' => 'Post updated successfully',
-            'data' => $post,
+            'data' => $posts,
         ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy(Post $posts)
     {
-        $post->delete();
+        $posts->delete();
 
         return response()->json([
             'success' => true,
