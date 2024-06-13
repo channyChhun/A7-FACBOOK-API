@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->text('image');
+            $table->string('image_post')->nullable();
             $table->foreignId("user_id")
             ->references("id")
             ->on("users")
