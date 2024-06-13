@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware('auth:sanctum')->group(function(){
-    Route::resource('/post',PostController::class);
+   
 });
+Route::resource('/post',PostController::class);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);
 
@@ -34,4 +36,5 @@ Route::get('user/edit/{id}', [ProfileController::class, 'update']);
   
 
 // });
+Route::resource('/like',LikeController::class);
 

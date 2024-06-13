@@ -4,9 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\UserResource as User;
 
-class PostResource extends JsonResource
+class LikeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +16,8 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->id, 
-            'title' => $this->title, 
-            'content' => $this->content];
+            'user_id' => $this->user,
+            'post_id' => $this->post
+        ];
     }
 }

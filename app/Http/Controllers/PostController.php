@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
-use App\Http\Resources\Postsource;
+use App\Http\Resources\Post\Postresource;
 use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
@@ -37,21 +37,62 @@ class PostController extends Controller
             'message' => 'Resource was not found with the id: '.$id,
         ], 404);
     }
+    public function store(Request $request)
+    {
+        $title = $request->title;
+        $content = $request->content;
+        $user_id = $request->user_id;
+        $posts = new Post();
+        $posts->title = $title;
+        $posts->content = $content;
+        $posts->user_id = $user_id;
+        $posts->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'You been create post successfully: ',
+        ], 200);
+        
 
+    }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
-        //
+        $posts = Post::find($id);
+
+        if ($posts) {
+            $posts->title = $request->title;
+            $posts->content = $request->content;
+            $posts->save();
+            return response()->json([
+                'success' => true,
+                'message' => 'Post updated successfully',
+                'data' => $posts
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Post not found',
+            ], 404);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy(Post $posts, $id)
     {
-       
+        $posts = Post::find($id);
+        $posts = $posts ? $posts->delete() : false;
+
+        return $posts ? response()->json([
+            'success' => true,
+            'message' => 'Post deleted successfully',
+        ], 200): response()->json([
+            'success' => false,
+            'message' => 'Failed to delete the post',
+        ], 404);
     }
    
 }
