@@ -28,7 +28,7 @@ Route::post('/logout',[AuthController::class, 'logout']);
 // =========profile user========
 Route::get('user',[ProfileController::class,'index']);
 Route::get('user/show/{id}', [ProfileController::class, 'show']);
-Route::get('user/edit/{id}', [ProfileController::class, 'update']);
+Route::put('user/edit/{id}', [ProfileController::class, 'update']);
 // ============="""=======
 Route::middleware('auth:sanctum')->group(function(){
   Route::post('/profileupload',[ProfileController::class,'store']);
