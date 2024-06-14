@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Like;
 use Illuminate\Http\Request;
 use App\Http\Resources\LikeResource;
-use App\Http\Requests\LikeRequest;
 class LikeController extends Controller
 {
     /**
@@ -38,29 +37,49 @@ class LikeController extends Controller
     }
     
     
-    public function store(LikeRequest $request)
+    public function store(Request $request)
     {
-        $likes = Like::storeOrUpate($request);
-        return response()->json([
-            'success' => true,
-            'message' => 'You successfully created a new post',
-            'data' => new LikeResource($likes),
-        ], 200);
+        $likes = new Like();
+        $likes->user_id = $request->user_id;
+        $likes->post_id= $request->post_id;
+        $likes->user_id = $request->user_id;
+        $likes->post_id = $request->post_id;
+        $likes->save();
+    
+        return $likes ? response()->json([
+            'message' => 'Like created successfully',
+            'data' => $likes
+        ], 200):response()->json([
+            'success' => false,
+           'message' => 'Failed to create the like',
+        ] , 404);
     }
    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Like $like)
+    public function destroy(Request $request, $id)
     {
-        $like = $like->delete();
-        return $like? response()->json([
-           'success' => true,
-           'message' => 'Like was successfully deleted',
-        ], 200): response()->json([
-           'success' => false,
-           'message' => 'Like was not found with the id: '.$id,
-        ], 404);
+        $likes = Like::find($id);
+        if (!$likes) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nothing post for like',
+            ], 404);
+        }
+        if ($likes->user_id != $request->user()->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not authorized to delete this like',
+            ], 403);
+        }
+
+        $likes->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Your like deleted successfully',
+        ], 200);
     }
 }
+
