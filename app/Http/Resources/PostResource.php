@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\UserResource as User;
 
 class PostResource extends JsonResource
 {
@@ -15,12 +14,14 @@ class PostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id' => $this->id, 
-            'title' => $this->title, 
-            'content' => $this->content,
-            
+            return [
+                "id"=>$this->id,
+                "title"=>$this->title,
+                "content"=>$this->content,
+                "user_id"=>$this->user->id,
+                "image_post"=>$this->image_post,
+                // "comments"=>CommentResource::collection($this->comments)
+            ];
 
-        ];
     }
 }

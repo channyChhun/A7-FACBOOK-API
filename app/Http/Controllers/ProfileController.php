@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Resources\UserResource;
 use Exception;
+use Illuminate\Support\Facades\Validator;
+use file;
 class ProfileController extends Controller
 {
     /**
@@ -13,18 +16,49 @@ class ProfileController extends Controller
     public function index()
     {
         $user=User::all();
-        return response()->json(["data"=>$user,"message"=>"sucessfuly"],200);
-        
+        return response()->json([
+            'success' => true,
+            'message' => 'Here are all of your posts',
+           'data' => UserResource::collection($user),
+        ], 200);
     }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        
-    }
+        $validator=Validator::make($request->all(),[
+            'name'=>'required',
+            'profile_img'=>'nullable|image|mimes:jpg,bmp,png',
 
+        ]);
+        if($validator->fails()){
+            return response()->json(["message"=>'Validation fails','error'=>$validator->errors()],400);
+        }
+        $user=$request->user();
+        if($request->hasFile('profile_img')){
+            if($user->profile_img){
+                $old_part=public_path().'/upload/'
+                .$user->profile_img;
+                if(File::exists($old_part)){
+                    File::delete($old_part);
+    
+            }   
+        }
+        $image_name='profile_img'.time().'.'.$request->profile_img->extension();
+        $request->profile_img->move(public_path('/upload/'),$image_name);
+
+    }
+    else {
+        $image_name=$user->profile_img;
+
+    }
+    $user->update([
+        'name'=>$request->name,
+        'profile_img'=>$image_name,
+    ]);
+    return response()->json(['message'=>"profile successfully updated"],200);
+    }
     /**
      * Display the specified resource.
      */
@@ -56,6 +90,7 @@ class ProfileController extends Controller
 
         
     }
+    
 
     /**
      * Remove the specified resource from storage.

@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
-use App\Http\Resources\Postsource;
-use App\Http\Requests\PostRequest;
+use App\Http\Resources\PostResource;
 use Exception;
 use Storage;
 
@@ -20,7 +19,7 @@ class PostController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Here are all of your posts',
-            'data' => $posts,
+           'data' => PostResource::collection( $posts),
         ], 200);
     }
 
@@ -41,16 +40,16 @@ class PostController extends Controller
             $imagePath = $request->file('image_post')->store('image_post', 'public');
         }
     
-        $post = new Post();
-        $post->title = $request->title;
-        $post->content = $request->input('content');
-        $post->image_post = $imagePath;
-        $post->user_id = $request->user_id;
-        $post->save();
+        $posts = new Post();
+        $posts->title = $request->title;
+        $posts->content = $request->input('content');
+        $posts->image_post = $imagePath;
+        $posts->user_id = $request->user_id;
+        $posts->save();
     
         return response()->json([
             'message' => 'Post created successfully',
-            'data' => $post
+            'data' => $posts
         ], 201);
     }
     
@@ -81,30 +80,26 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'nullable|string',
             'image_post' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            // 'user_id' => 'required|exists:users,id',
         ]);
     
-        // $post = Post::findOrFail($id);
-        $post = Post::find($id);
+        $posts = Post::find($id);
     
-        $post->title = $request->title;
-        $post->content = $request->input('content');
-        // $post->user_id = $request->user_id;
+        $posts->title = $request->title;
+        $posts->content = $request->input('content');
     
         if ($request->hasFile('image_post')) {
-            // Delete the old image if it exists
-            if ($post->image_post) {
-                Storage::disk('public')->delete($post->image_post);
+            if ($posts->image_post) {
+                Storage::disk('public')->delete($posts->image_post);
             }
             // Store the new image
-            $post->image_post = $request->file('image_post')->store('image_post', 'public');
+            $posts->image_post = $request->file('image_post')->store('image_post', 'public');
         }
     
-        $post->save();
+        $posts->save();
     
         return response()->json([
             'message' => 'Post updated successfully',
-            'data' => $post
+            'data' => $posts
         ], 200);
     }
     
