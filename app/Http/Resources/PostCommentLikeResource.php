@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\PostResource;
 
 class PostCommentLikeResource extends JsonResource
 {
@@ -20,7 +21,7 @@ class PostCommentLikeResource extends JsonResource
             "email"=>$this->email,
             "posts"=>PostResource::collection($this->posts),
             // "comments"=>CommentResource::collection($this->comments),
-            // "likes"=>LikeResource::collection($this->comments)
+            "likes"=>LikeResource::collection($this->comments)
         ];
     }
 }
