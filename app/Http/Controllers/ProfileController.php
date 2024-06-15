@@ -65,7 +65,13 @@ class ProfileController extends Controller
     public function show(string $id)
     {
         $user = User::find($id);
-        return response()->json(["success"=>true, "data"=>$user], 200);
+        // return response()->json(["success"=>true, "data"=>$user], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Here are all of your posts',
+           'data' =>new UserResource($user)
+        ], 200);
+        
     }
 
     /**

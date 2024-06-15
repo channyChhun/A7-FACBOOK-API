@@ -19,7 +19,7 @@ class PostResource extends JsonResource
             "title"=>$this->title,
             "content"=>$this->content,
             "image_post"=>$this->image_post,
-            "user_id"=>$this->user->id,
+            // "user_id"=>$this->user->id,
             "comments"=>CommentResource::collection($this->comments)
         ];
     }
