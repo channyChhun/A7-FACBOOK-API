@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -81,5 +83,52 @@ class AuthController extends Controller
            'message' => 'Successfully logged out'
         ]);
 
+    }
+    // ========code resetPassw=======
+    public function sendEmailVerify(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = DB::table('users')->where('email', '=', $request->email)->first();
+
+        if ($user) {
+            $passcord = Str::random(6);
+
+            DB::table('reset_passwords')->insert([
+                'email' => $request->email,
+                'passcord' => $passcord,
+            ]);
+
+            return response()->json(['message' => 'Password reset email sent successfully', 'passcord' => $passcord]);
+        } else {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $resetData = DB::table('reset_passwords')
+            ->where('email', $request->email)
+            ->where('passcord', $request->passcord)
+            ->first();
+
+        if (!$resetData) {
+            return response()->json(['message' => 'Reset password link is invalid'], 404);
+        }
+
+        $user = User::where('email', $resetData->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        DB::table('reset_passwords')->where('passcord', $resetData->passcord)->delete();
+
+        return response()->json(['message' => 'Password reset successfully']);
     }
 }
