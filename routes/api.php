@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +38,7 @@ Route::middleware('auth:sanctum')->group(function(){
   Route::post('/profileupload',[ProfileController::class,'store']);
   Route::resource('/post',PostController::class);
   Route::resource('/like',LikeController::class);
-
+  Route::resource('/comment',CommentController::class);
 
 });
 

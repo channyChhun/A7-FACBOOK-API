@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             "email"=>$this->email,
             "profile_img"=>$this->profile_img,
             "posts"=>PostResource::collection($this->posts),
-            // "comments"=>CommentResource::collection($this->comments)
+            "comments"=>CommentResource::collection($this->comments)
         ];;
     }
 }

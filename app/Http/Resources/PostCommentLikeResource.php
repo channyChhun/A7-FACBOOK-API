@@ -20,7 +20,7 @@ class PostCommentLikeResource extends JsonResource
             "name"=>$this->name,
             "email"=>$this->email,
             "posts"=>PostResource::collection($this->posts),
-            // "comments"=>CommentResource::collection($this->comments),
+            "comments"=>CommentResource::collection($this->comments),
             "likes"=>LikeResource::collection($this->comments)
         ];
     }

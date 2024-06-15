@@ -42,8 +42,6 @@ class LikeController extends Controller
         $likes = new Like();
         $likes->user_id = $request->user_id;
         $likes->post_id= $request->post_id;
-        $likes->user_id = $request->user_id;
-        $likes->post_id = $request->post_id;
         $likes->save();
     
         return $likes ? response()->json([

@@ -20,7 +20,7 @@ class PostResource extends JsonResource
             "content"=>$this->content,
             "image_post"=>$this->image_post,
             "user_id"=>$this->user->id,
-            // "comments"=>CommentResource::collection($this->comments)
+            "comments"=>CommentResource::collection($this->comments)
         ];
     }
 }
