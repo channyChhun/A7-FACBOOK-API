@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Like;
 use Illuminate\Http\Request;
 use App\Http\Resources\LikeResource;
+use Illuminate\Support\Facades\Log;
 class LikeController extends Controller
 {
     /**
@@ -37,46 +38,43 @@ class LikeController extends Controller
     }
     
     
-    public function store(Request $request)
+   public function store(Request $request)
     {
-        $likes = new Like();
-        $likes->user_id = $request->user_id;
-        $likes->post_id= $request->post_id;
-        $likes->save();
-    
-        return $likes ? response()->json([
-            'message' => 'Like created successfully',
-            'data' => $likes
-        ], 200):response()->json([
-            'success' => false,
-           'message' => 'Failed to create the like',
-        ] , 404);
-    }
-   
+        // Log the incoming request data
+        Log::info('Incoming request data:', $request->all());
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Request $request, $id)
-    {
-        $likes = Like::find($id);
-        if (!$likes) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Nothing post for like',
-            ], 404);
-        }
-        if ($likes->user_id != $request->user()->id) {
-            return response()->json([
-                'success' => false,
-                'message' => 'You are not authorized to delete this like',
-            ], 403);
-        }
+        // Validate the request
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'post_id' => 'required|exists:posts,id',
+        ]);
 
-        $likes->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'Your like deleted successfully',
-        ], 200);
+        // Log the validated data
+        Log::info('Validated data:', $validatedData);
+
+        // Check if the like already exists
+        $existingLike = Like::where('user_id', $validatedData['user_id'])
+                            ->where('post_id', $validatedData['post_id'])
+                            ->first();
+
+        if ($existingLike) {
+            // If like exists, remove it (unlike)
+            $existingLike->delete();
+
+            return response()->json([
+                'message' => 'Post unliked successfully',
+            ], 200);
+        } else {
+            // If like does not exist, create a new like
+            $like = new Like();
+            $like->user_id = $validatedData['user_id'];
+            $like->post_id = $validatedData['post_id'];
+            $like->save();
+
+            return response()->json([
+                'message' => 'Post liked successfully',
+                'data' => $like
+            ], 200);
+        }
     }
 }
