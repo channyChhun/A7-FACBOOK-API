@@ -55,4 +55,52 @@ class User extends Authenticatable
         return $this->hasMany(Like::class);
     }
 
+    // it is for Friend(Ex: addfried,acceptfriend.....)
+    public function friends()
+    {
+        return $this->hasMany(Friend::class, 'user_id');
+    }
+
+    public function friendRequests()
+    {
+        return $this->hasMany(Friend::class, 'user_id')->where('status', 'pending');
+    }
+
+    public function friendsPending()
+    {
+        return $this->hasMany(Friend::class, 'user_id')->where('status', 'pending');
+    }
+
+    public function friendsAccepted()
+    {
+        return $this->hasMany(Friend::class, 'user_id')->where('status', 'accepted');
+    }
+
+    public function friendsRejected()
+    {
+        return $this->hasMany(Friend::class, 'user_id')->where('status', 'rejected');
+    }
+
+    public function friendsBlocked()
+    {
+        return $this->hasMany(Friend::class, 'user_id')->where('status', 'blocked');
+    }
+
+    public function friendsBlockedBy()
+    {
+        return $this->hasMany(Friend::class, 'friend_id')->where('status', 'blocked');
+    }
+
+    public function friendsPendingFrom()
+    {
+        return $this->hasMany(Friend::class, 'friend_id')->where('status', 'pending');
+    }
+
+    public function friendsAcceptedFrom()
+    {
+        return $this->hasMany(Friend::class, 'friend_id')->where('status', 'accepted');
+    }
+
+
 }
+

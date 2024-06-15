@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FriendController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -37,6 +38,8 @@ Route::middleware('auth:sanctum')->group(function(){
   Route::post('/profileupload',[ProfileController::class,'store']);
   Route::resource('/post',PostController::class);
   Route::resource('/like',LikeController::class);
+  Route::apiResource('/friends',FriendController::class);
+  
 
 
 });
