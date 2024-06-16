@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\PostCommentLikeResource;
+use App\Http\Resources\CountPostCommentResource;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 use file;
@@ -14,9 +15,10 @@ class ProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
+  
     public function index()
     {
-        $user=User::all();
+        $user = User::all();
         return response()->json([
             'success' => true,
             'message' => 'Here are all of your posts',
@@ -109,6 +111,11 @@ class ProfileController extends Controller
         $user = User::find($id);
         $user = new PostCommentLikeResource($user);
         return response()->json(["success"=>true, "data"=>$user], 200);
+    }
+    public function countPostsComments(){
+        $users = User::all();
+        $users = CountPostCommentResource::collection($users);
+        return response()->json(["success"=>true, "data"=>$users], 200);
     }
     
 }

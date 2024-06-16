@@ -43,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function(){
   
   Route::get("/users_posts_comments_likes", [ProfileController::class, "getUserPostsCommentsLikes"]);
   Route::get("/users_posts_comments_likes/{user_id}", [ProfileController::class, "getPostsCommentsLikesFromUser"]);
+  Route::get("/count_posts_comments", [ProfileController::class, "countPostsComments"]);
   // ===========Friend==========
   Route::post('/friend-request', [FriendController::class, 'sendRequest']);
   Route::post('/friend-request/accept/{id}', [FriendController::class, 'acceptRequest']);
@@ -56,7 +57,7 @@ Route::middleware('auth:sanctum')->group(function(){
   Route::post('/logout',[AuthController::class, 'logout']);
 
 });
-Route::resource('/friend',FriendController::class);
+
 
 // =========reset password=======
 Route::post('/password/email', [AuthController::class, 'sendEmailVerify']);
