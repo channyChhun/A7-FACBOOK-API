@@ -63,7 +63,7 @@ class PostController extends Controller
         return $posts ? response()->json([
             'success' => true,
             'message' => 'Resource was successfully retrieved with the id: '.$id,
-            'data' => $posts
+            'data' =>new PostResource($posts)
         ], 200): response()->json([
             'success' => false,
             'message' => 'Resource was not found with the id: '.$id,
