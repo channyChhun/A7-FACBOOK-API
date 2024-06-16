@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\PostCommentLikeResource;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 use file;
@@ -96,13 +97,18 @@ class ProfileController extends Controller
 
         
     }
-    
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+       // Get user's posts, comments, likes ===============
+       public function getUserPostsCommentsLikes(){
+        $users = User::all();
+        $users = PostCommentLikeResource::collection($users);
+        return response()->json(["success"=>true, "data"=>$users], 200);
     }
+
+    // Get user's posts, comments, likes from user's id ===============
+    public function getPostsCommentsLikesFromUser(string $id){
+        $user = User::find($id);
+        $user = new PostCommentLikeResource($user);
+        return response()->json(["success"=>true, "data"=>$user], 200);
+    }
+    
 }
