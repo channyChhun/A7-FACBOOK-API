@@ -44,3 +44,6 @@ Route::middleware('auth:sanctum')->group(function(){
 });
 Route::resource('/friend',FriendController::class);
 
+Route::post('/password/email', [AuthController::class, 'sendEmailVerify']);
+Route::post('/password/reset', [AuthController::class, 'resetPassword']);
+
