@@ -7,6 +7,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FriendController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,4 +42,5 @@ Route::middleware('auth:sanctum')->group(function(){
   Route::resource('/comment',CommentController::class);
 
 });
+Route::resource('/friend',FriendController::class);
 
