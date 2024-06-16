@@ -229,33 +229,7 @@ class PostController extends Controller
             'data' => $posts
         ], 200);
     }
-   /**
- * @OA\Schema(
- *     schema="Post",
- *     type="object",
- *     @OA\Property(property="id", type="integer"),
- *     @OA\Property(property="title", type="string"),
- *     @OA\Property(property="content", type="string"),
- *     @OA\Property(property="image_post", type="string"),
- *     @OA\Property(property="user_id", type="integer"),
- *     @OA\Property(property="created_at", type="string", format="date-time"),
- *     @OA\Property(property="updated_at", type="string", format="date-time")
- * )
- */
-
-/**
- * @OA\Schema(
- *     schema="PostInput",
- *     type="object",
- *     required={"title", "user_id"},
- *     @OA\Property(property="title", type="string"),
- *     @OA\Property(property="content", type="string"),
- *     @OA\Property(property="image_post", type="string", format="binary"),
- *     @OA\Property(property="user_id", type="integer")
- * )
- */
  
-
     /**
      * Remove the specified resource from storage.
      */
