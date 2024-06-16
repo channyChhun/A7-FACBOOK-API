@@ -88,8 +88,30 @@ class AuthController extends Controller
         ]);
 
     }
+    
     // ========code resetPassw=======
-  
+    public function sendEmailVerify(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = DB::table('users')->where('email', '=', $request->email)->first();
+
+        if ($user) {
+            $passcord = Str::random(6);
+
+            DB::table('reset_passwords')->insert([
+                'email' => $request->email,
+                'passcord' => $passcord,
+            ]);
+
+            return response()->json(['message' => 'Password reset email sent successfully', 'passcord' => $passcord]);
+        } else {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    }
+
     public function resetPassword(Request $request)
     {
         $resetData = DB::table('reset_passwords')
