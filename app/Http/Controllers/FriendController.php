@@ -6,10 +6,48 @@ use App\Models\Friend;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+/**
+ * @OA\Tag(
+ *     name="Friend",
+ *     description="Operations related to friend management"
+ * )
+ */
 
 class FriendController extends Controller
 {
+    
+    /**
+     * @OA\Post(
+     *     path="/api/friends/request",
+     *     summary="Send a friend request",
+     *     tags={"Friend"},
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="recipient_id",
+     *                     type="integer"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Friend request sent successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Error occurred while sending friend request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     )
+     * )
+     */
     public function sendRequest(Request $request)
     {
         $request->validate([
@@ -38,6 +76,33 @@ class FriendController extends Controller
 
         return response()->json(['message' => 'Friend request sent successfully.'], 200);
     }
+     /**
+     * @OA\Post(
+     *     path="/api/friends/{id}/accept",
+     *     summary="Accept a friend request",
+     *     tags={"Friend"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Friend request accepted",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Friend request not found or already processed",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     )
+     * )
+     */
 
     public function acceptRequest($id)
     {
@@ -69,7 +134,33 @@ class FriendController extends Controller
 
         return response()->json(['message' => 'Friend request accepted.'], 200);
     }
- 
+     /**
+     * @OA\Post(
+     *     path="/api/friends/{id}/reject",
+     *     summary="Reject a friend request",
+     *     tags={"Friend"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Friend request rejected",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Friend request not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string")
+     *         )
+     *     )
+     * )
+     */
 
     public function rejectRequest($id)
     {
@@ -85,7 +176,6 @@ class FriendController extends Controller
             return response()->json(['error' => 'Friend request not found.'], 404);
         }
     }
-    
 
     public function pendingRequests()
     {
@@ -104,6 +194,7 @@ class FriendController extends Controller
 
         return response()->json($sentRequests, 200);
     }
+
     public function friendsList(Request $request)
     {
         $userId = auth()->id();
@@ -115,6 +206,8 @@ class FriendController extends Controller
 
         return response()->json($friends);
     }
+    
+  
     public function friendShow($friendId)
     {
         $userId = auth()->id();
@@ -131,6 +224,26 @@ class FriendController extends Controller
 
         return response()->json($friend);
     }
+    /**
+     * @OA\Delete(
+     *     path="/api/friends/{id}",
+     *     summary="Remove a friend",
+     *     tags={"Friend"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Friend deleted successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     )
+     * )
+     */
     public function removeFriend($friendId)
     {
         $userId = auth()->id();

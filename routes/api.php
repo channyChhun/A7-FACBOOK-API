@@ -8,7 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendController;
-
+use App\Http\Controllers\api\homeController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,12 +35,10 @@ Route::put('user/edit/{id}', [ProfileController::class, 'update']);
 // ============="""=======
 
 Route::middleware('auth:sanctum')->group(function(){
-  
   Route::post('/profileupload',[ProfileController::class,'store']);
   Route::resource('/post',PostController::class);
-  Route::resource('/like',LikeController::class);
   Route::resource('/comment',CommentController::class);
-  
+  Route::resource('/like',LikeController::class);
   Route::get("/users_posts_comments_likes", [ProfileController::class, "getUserPostsCommentsLikes"]);
   Route::get("/users_posts_comments_likes/{user_id}", [ProfileController::class, "getPostsCommentsLikesFromUser"]);
   Route::get("/count_posts_comments", [ProfileController::class, "countPostsComments"]);
@@ -57,7 +55,6 @@ Route::middleware('auth:sanctum')->group(function(){
   Route::post('/logout',[AuthController::class, 'logout']);
 
 });
-
 
 // =========reset password=======
 Route::post('/password/email', [AuthController::class, 'sendEmailVerify']);

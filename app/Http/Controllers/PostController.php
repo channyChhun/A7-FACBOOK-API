@@ -11,6 +11,40 @@ use Storage;
 class PostController extends Controller
 {
     /**
+ * @OA\Info(
+ *     title="Blog API",
+ *     version="1.0.0",
+ *     description="API for managing blog posts"
+ * )
+ */
+
+/**
+ * @OA\Get(
+ *     path="/api/post",
+ *     summary="Get all posts",
+ *     @OA\Response(
+ *         response="200",
+ *         description="Successful response",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean"
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string"
+ *             ),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="array",
+ *                 @OA\Items(ref="#/components/schemas/Post")
+ *             )
+ *         )
+ *     )
+ * )
+ */
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -23,6 +57,31 @@ class PostController extends Controller
         ], 200);
     }
 
+/**
+ * @OA\Post(
+ *     path="/api/post",
+ *     summary="Create a new post",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(ref="#/components/schemas/PostInput")
+ *     ),
+ *     @OA\Response(
+ *         response="201",
+ *         description="Successful response",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string"
+ *             ),
+ *             @OA\Property(
+ *                 property="data",
+ *                 ref="#/components/schemas/Post"
+ *             )
+ *         )
+ *     )
+ * )
+ */
     /**
      * Store a newly created resource in storage.
      */
@@ -54,6 +113,42 @@ class PostController extends Controller
     }
     
     
+/**
+ * @OA\Get(
+ *     path="/api/post/{id}",
+ *     summary="Get a post",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="Post ID",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response="200",
+ *         description="Successful response",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(
+ *                 property="success",
+ *                 type="boolean"
+ *             ),
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string"
+ *             ),
+ *             @OA\Property(
+ *                 property="data",
+ *                 ref="#/components/schemas/Post"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response="404",
+ *         description="Post not found"
+ *     )
+ * )
+ */
     /**
      * Display the specified resource.
      */
@@ -71,6 +166,38 @@ class PostController extends Controller
         
     }
 
+/**
+ * @OA\Put(
+ *     path="/api/post/{id}",
+ *     summary="Update a post",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="Post ID",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(ref="#/components/schemas/PostInput")
+ *     ),
+ *     @OA\Response(
+ *         response="200",
+ *         description="Successful response",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string"
+ *             ),
+ *             @OA\Property(
+ *                 property="data",
+ *                 ref="#/components/schemas/Post"
+ *             )
+ *         )
+ *     )
+ * )
+ */
     /**
      * Update the specified resource in storage.
      */
@@ -102,7 +229,32 @@ class PostController extends Controller
             'data' => $posts
         ], 200);
     }
-    
+   /**
+ * @OA\Schema(
+ *     schema="Post",
+ *     type="object",
+ *     @OA\Property(property="id", type="integer"),
+ *     @OA\Property(property="title", type="string"),
+ *     @OA\Property(property="content", type="string"),
+ *     @OA\Property(property="image_post", type="string"),
+ *     @OA\Property(property="user_id", type="integer"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time")
+ * )
+ */
+
+/**
+ * @OA\Schema(
+ *     schema="PostInput",
+ *     type="object",
+ *     required={"title", "user_id"},
+ *     @OA\Property(property="title", type="string"),
+ *     @OA\Property(property="content", type="string"),
+ *     @OA\Property(property="image_post", type="string", format="binary"),
+ *     @OA\Property(property="user_id", type="integer")
+ * )
+ */
+ 
 
     /**
      * Remove the specified resource from storage.

@@ -6,6 +6,35 @@ use App\Models\Like;
 use Illuminate\Http\Request;
 use App\Http\Resources\LikeResource;
 use Illuminate\Support\Facades\Log;
+/**
+ * @OA\Get(
+ *     path="/api/like",
+ *     summary="Retrieve a user's likes",
+ *     @OA\Parameter(
+ *         name="user_id",
+ *         in="query",
+ *         description="User ID",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response="200",
+ *         description="Successful response",
+ *         @OA\JsonContent(
+ *             type="array",
+ *             @OA\Items(
+ *                 type="object",
+ *                 @OA\Property(property="id", type="integer"),
+ *                 @OA\Property(property="user_id", type="integer"),
+ *                 @OA\Property(property="liked_entity_id", type="integer"),
+ *                 @OA\Property(property="created_at", type="string", format="date-time"),
+ *                 @OA\Property(property="updated_at", type="string", format="date-time")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response="404", description="User not found")
+ * )
+ */
 class LikeController extends Controller
 {
     /**
@@ -20,7 +49,32 @@ class LikeController extends Controller
             'data' => LikeResource::collection($likes),
         ], 200);
     }
-
+/**
+ * @OA\Get(
+ *     path="/api/like/{id}",
+ *     summary="Retrieve a like",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="Like ID",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response="200",
+ *         description="Successful response",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="id", type="integer"),
+ *             @OA\Property(property="user_id", type="integer"),
+ *             @OA\Property(property="liked_entity_id", type="integer"),
+ *             @OA\Property(property="created_at", type="string", format="date-time"),
+ *             @OA\Property(property="updated_at", type="string", format="date-time")
+ *         )
+ *     ),
+ *     @OA\Response(response="404", description="Like not found")
+ * )
+ */
     /**
      * Display the specified resource.
      */
@@ -37,7 +91,33 @@ class LikeController extends Controller
         ], 404);
     }
     
-    
+   /**
+ * @OA\Post(
+ *     path="/api/like",
+ *     summary="Create a new like",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="user_id", type="integer", example=1),
+ *             @OA\Property(property="liked_entity_id", type="integer", example=10)
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response="201",
+ *         description="Successful response",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="id", type="integer"),
+ *             @OA\Property(property="user_id", type="integer"),
+ *             @OA\Property(property="liked_entity_id", type="integer"),
+ *             @OA\Property(property="created_at", type="string", format="date-time"),
+ *             @OA\Property(property="updated_at", type="string", format="date-time")
+ *         )
+ *     ),
+ *     @OA\Response(response="400", description="Invalid input")
+ * )
+ */ 
    public function store(Request $request)
     {
         // Log the incoming request data
