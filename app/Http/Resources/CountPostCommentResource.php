@@ -18,7 +18,6 @@ class CountPostCommentResource extends JsonResource
             "id"=>$this->id,
             "name"=>$this->name,
             "email"=>$this->email,
-            "posts"=>count(PostResource::collection($this->posts)),
             "comments"=>count(CommentResource::collection($this->comments)),
             "likes"=>count(LikeResource::collection($this->likes))
 
